@@ -47,15 +47,16 @@ class ConnectionManager:
         """Отключает пользователя"""
         self.active_connections.remove(websocket)
 
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        """Отправляет персональное сообщение игроку чей сейчас ход"""
-        await websocket.send_text(message)
-
-    async def broadcast_without_active_player(self, message: dict, websoket: WebSocket):
+    async def broadcast_without_active_player(self, message: dict, websocket: WebSocket):
         """Отправляет сообщение второму игроку"""
-        for connenction in self.active_connections:
-            if connenction != websoket:
-                await connenction.send_json(message)
+        for connection in self.active_connections:
+            if connection != websocket:
+                await connection.send_json(message)
+
+    async def broadcast(self, message: dict):
+        """Отправляет сообщение второму игроку"""
+        for connection in self.active_connections:
+            await connection.send_json(message)
 
 
 manager = ConnectionManager()

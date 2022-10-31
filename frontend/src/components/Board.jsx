@@ -1,6 +1,4 @@
 import React from 'react';
-import setInfo from './Table'
-
 
 export function Board(props) {
 
@@ -17,7 +15,7 @@ export function Board(props) {
         if (checkCell(cell)) {
             props.ws.send(JSON.stringify({player: props.player, cell: id}))
         } else {
-            setInfo('Now not is your turn or Choose another cell')
+            props.setInfo('Now not is your turn or Choose another cell')
         }
     }
     return (

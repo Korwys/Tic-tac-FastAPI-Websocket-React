@@ -27,6 +27,7 @@ export function Table() {
         [6, 4, 2],
         ]
 
+
     function updateCell(cell, player) {
         let getCell = document.getElementById(cell)
         getCell.innerHTML = player
@@ -37,7 +38,7 @@ export function Table() {
             document.getElementById(c).style.background = 'grey'
     }
 
-    function colorRow() {
+    function colorRow(color) {
         let cells = []
         for (let cell = 1; cell <= 10; cell++) {
             cells.push(document.getElementById(cell))
@@ -46,12 +47,13 @@ export function Table() {
             console.log(row);
             if (cells[row[0]].innerHTML == cells[row[1]].innerHTML && cells[row[0]].innerHTML == cells[row[2]].innerHTML && cells[row[0]].innerHTML != "*") {
                 console.log(cells[row[0]].innerHTML, cells[row[1]].innerHTML, cells[row[2]].innerHTML);
-                cells[row[0]].style.backgroundColor = 'green';
-                cells[row[1]].style.backgroundColor = 'green';
-                cells[row[2]].style.backgroundColor = 'green';
+                cells[row[0]].style.backgroundColor = color;
+                cells[row[1]].style.backgroundColor = color;
+                cells[row[2]].style.backgroundColor = color;
             }
         });
     }
+
 
     function checkQueue() {
         currentPlayer = changePlayer[currentPlayer]
@@ -75,26 +77,23 @@ export function Table() {
             currentPlayer = 'X'
             setCurrentPlayerName('X')
 
-        } else if (response.info) {
+        } else if (response.info === true) {
             updateCell(response.cell, response.player)
             setInfo(' Sorry, but not today! You Lose!')
+            colorRow('red')
 
         } else {
             if (response.message === 'You Win') {
-                console.log(response)
                 updateCell(response.cell, response.player)
                 setInfo(response.message)
-                colorRow()
-                ws.close(3001)
+                colorRow('green')
+                // ws.close(3001)
             } else if (response.message === 'Draw') {
-                console.log(response)
                 updateCell(response.cell, response.player)
                 setInfo('It is Draw!')
                 colorAllCells()
-                ws.close(3001)
+                // ws.close(3001)
             } else {
-                console.log(response)
-                setInfo('Now your opponent turn')
                 updateCell(response.cell, response.player)
                 checkQueue()
             }
@@ -109,10 +108,10 @@ export function Table() {
                         <h3>You play by:{playerName}</h3> <span id="player"></span>
                         <h3>Info:{info}</h3> <span id="info"></span>
                     </td>
-                    <Board player = {player} currentPlayer={currentPlayer} ws={ws}/>
+                    <Board player = {player} currentPlayer={currentPlayer} ws={ws} setInfo={setInfo}/>
                 </tr>
             </table>
     );
-};
+}
 
-export default ws;
+export default Table;

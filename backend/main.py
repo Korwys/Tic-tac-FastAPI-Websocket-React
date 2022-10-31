@@ -8,7 +8,6 @@ from services.connections import manager
 app = FastAPI()
 
 
-
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)

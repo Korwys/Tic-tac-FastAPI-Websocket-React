@@ -34,7 +34,7 @@ def change_board_cell(indx: int, player: str) -> list:
     return board
 
 
-async def update_board(data: dict, websoket: WebSocket) -> None:
+async def update_board(data: dict, websocket: WebSocket) -> None:
     """После проверок возвращает ответ клиенту."""
     indx = int(data['cell']) - 1
     change_board_cell(indx, data['player'])
@@ -45,9 +45,9 @@ async def update_board(data: dict, websoket: WebSocket) -> None:
             "message": "You Win",
             "cell": data['cell']
         }
-        await websoket.send_json(send_data)
+        await websocket.send_json(send_data)
         await manager.broadcast_without_active_player({"info": True, "cell": data['cell'], 'player': data['player']},
-                                                      websoket)
+                                                      websocket)
     elif check_board() == 'Draw':
         send_data = {
             "init": False,
@@ -55,7 +55,8 @@ async def update_board(data: dict, websoket: WebSocket) -> None:
             "message": "Draw",
             "cell": data['cell']
         }
-        await manager.broadcast(send_data)
+        await websocket.send_json(send_data)
+        await manager.broadcast_without_active_player({"info": True, "cell": data['cell'], 'player': data['player']})
     else:
         send_data = {
             "init": False,
@@ -63,4 +64,5 @@ async def update_board(data: dict, websoket: WebSocket) -> None:
             "message": "Next",
             "cell": data['cell']
         }
+
         await manager.broadcast(send_data)
