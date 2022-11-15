@@ -9,7 +9,7 @@
 Для запуска локалько:
 
 ### /backend
-cmd: poetry init
+cmd: poetry install
 
 ### /frontend
 npm install
